@@ -2,7 +2,7 @@
 
 [![Android Build](https://img.shields.io/badge/Android%20Build-passing-brightgreen)](https://developer.android.com/) [![kotlin](https://img.shields.io/badge/Kotlin-1.4.xx-blue)](https://kotlinlang.org/) [![MVVM ](https://img.shields.io/badge/Architecture-MVVM-brightgreen)](https://www.raywenderlich.com/34-design-patterns-by-tutorials-mvvm) [![coroutines](https://img.shields.io/badge/Kotlin-Coroutines-orange)](https://developer.android.com/kotlin/coroutines) [![Dagger Hilt](https://img.shields.io/badge/Dagger-Hilt-orange)](https://dagger.dev/hilt)
 
-This is an MVVM android app that fetches data (Instrumentation Sensors) from a REST API [Sensors REST](https://instrumentation-sensors.herokuapp.com/) caches it in a locally using Room persistence library.
+This is an MVVM android app that fetches data (Instrumentation Sensors) from a REST API [Sensors REST](https://instrumentation-sensors.herokuapp.com/) and caches it locally using Room persistence library.
 
 ## Features
 * Room persistence library
