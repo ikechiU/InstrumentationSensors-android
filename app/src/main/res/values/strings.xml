@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Sensors</string>
+    <string name="sensor_image">Sensor Image</string>
+    <string name="title">Title</string>
+    <string name="description"><font color="#FF03DAC5">Description</font></string>
+    <string name="edit_description">Description</string>
+    <string name="source"><font color="#FF03DAC5">Source</font></string>
+    <string name="more_information"><font color="#FF03DAC5">More Information</font></string>
+    <string name="edit_source"><u>Source</u></string>
+    <string name="edit_more_information"><u>More Information</u></string>
+    <string name="add_description"><b><font color="#FFFFFFFF">Description</font></b></string>
+    <string name="add_source"><b><font color="#FFFFFFFF">Source</font></b></string>
+    <string name="add_more_information"><b><font color="#FFFFFFFF">More Information</font></b></string>
+    <string name="add_image_url"><b><font color="#FFFFFFFF">Image Url</font></b></string>
+    <string name="button_click">Button click</string>
+    <string name="delete">Delete</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="floating_action_button">Floating action button</string>
+    <string name="save">Save</string>
+    <string name="update">update</string>
+</resources>
