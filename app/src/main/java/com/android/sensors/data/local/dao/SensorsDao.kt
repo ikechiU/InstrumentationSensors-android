@@ -1,26 +1,22 @@
 package com.android.sensors.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.android.sensors.data.local.model.SensorsDbModel
+import com.android.sensors.domain.SensorsModel
 
 @Dao
 interface SensorsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSensor(sensorsDbModel: SensorsDbModel)
+    fun insertAllSensors(sensorsDbModels: List<SensorsDbModel>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSensors(sensorsDbModels: List<SensorsDbModel>)
+    @Query("DELETE FROM SensorsDbModel")
+    fun clearAllSensors()
+
+    @Query("SELECT * FROM SensorsDbModel")
+    fun getAllSensorsExtra(): PagingSource<Int, SensorsDbModel>
 
     @Query("DELETE FROM SensorsDbModel WHERE id LIKE :sensorsId")
-    fun deleteSensor(sensorsId: Long)
-
-    @Query("DELETE FROM SensorsDbModel WHERE id IN (:sensorsIds)")
-    fun deleteAllSensors(sensorsIds: List<Long>)
-
-    @Delete
-    fun deleteSensors(sensorsDbModels: List<SensorsDbModel>)
-
-    @Query("SELECT * FROM SensorsDbModel ORDER BY id ASC")
-    fun getAllSensors(): List<SensorsDbModel>
+    fun deleteSensor(sensorsId: String)
 }

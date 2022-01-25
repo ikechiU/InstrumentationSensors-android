@@ -2,18 +2,20 @@ package com.android.sensors.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.android.sensors.data.SensorRepository
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.android.sensors.data.repositories.SensorRepository
+import com.android.sensors.data.local.model.SensorsDbModel
 import com.android.sensors.data.remote.model.AddSensor
 import com.android.sensors.data.remote.model.GetSensor
 import com.android.sensors.data.remote.model.OperationStatus
 import com.android.sensors.domain.SensorsModel
-import com.android.sensors.ui.livedata.SingleLiveEvent
 import com.android.sensors.utils.calladapter.flow.Resource
+import com.android.sensors.utils.livedata.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,38 +67,18 @@ class SensorsViewModel @Inject constructor(
         sensorRepo.remote.deleteSensor(it).asLiveData()
     }
 
+
+
+    //RemoteMediator
+    fun fetchSensors(): Flow<PagingData<SensorsDbModel>> {
+        return sensorRepo.fetchSensors().cachedIn(viewModelScope)
+    }
+
+
     //LocalDatasource
-    val getAllSensorsLocal: LiveData<List<SensorsModel>> = sensorRepo.local.getAllSensors()
-
-    fun insertSensorLocal(getSensor: GetSensor) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val sensor = sensorRepo.remote.mapSensor(getSensor)
-            sensorRepo.local.insertSensor(sensor)
-        }
-    }
-
-    fun insertSensorsLocal(getSensors: List<GetSensor>) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val sensors = sensorRepo.remote.mapSensors(getSensors)
-            sensorRepo.local.insertSensors(sensors)
-        }
-    }
-
-    fun deleteSensorLocal(id: Long) {
+    fun deleteSensorLocal(id: String) {
         viewModelScope.launch(Dispatchers.Default) {
             sensorRepo.local.deleteSensor(id)
-        }
-    }
-
-    fun deleteSensorsLocal(sensors: List<SensorsModel>) {
-        viewModelScope.launch(Dispatchers.Default) {
-            sensorRepo.local.deleteSensors(sensors)
-        }
-    }
-
-    fun deleteAllSensorsLocal(ids: List<Long>) {
-        viewModelScope.launch(Dispatchers.Default) {
-            sensorRepo.local.deleteAllSensors(ids)
         }
     }
 

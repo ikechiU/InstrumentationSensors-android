@@ -1,19 +1,15 @@
 package com.android.sensors.data.local.datasource
 
-import androidx.lifecycle.LiveData
-import com.android.sensors.domain.SensorsModel
+import com.android.sensors.data.local.dao.SensorsDao
+import javax.inject.Inject
+import javax.inject.Singleton
 
-interface LocalDatasource {
+@Singleton
+class LocalDatasource @Inject constructor(
+    private val sensorsDao: SensorsDao
+)  {
 
-    fun insertSensor(sensorsModel: SensorsModel)
-
-    fun insertSensors(sensorsModel: List<SensorsModel>)
-
-    fun deleteAllSensors(sensorIds: List<Long>)
-
-    fun deleteSensors(sensorsModel: List<SensorsModel>)
-
-    fun deleteSensor(sensorId: Long)
-
-    fun getAllSensors(): LiveData<List<SensorsModel>>
+    fun deleteSensor(sensorId: String) {
+        sensorsDao.deleteSensor(sensorId)
+    }
 }

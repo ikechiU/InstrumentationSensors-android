@@ -3,10 +3,7 @@ package com.android.sensors.di.module
 import android.content.Context
 import androidx.room.Room
 import com.android.sensors.data.local.AppDatabase
-import com.android.sensors.data.local.dbmapper.DbMapper
-import com.android.sensors.data.local.dbmapper.DbMapperImpl
 import com.android.sensors.utils.Const.APP_DATABASE_NAME
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,6 +31,6 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun dbMapper(): DbMapper = DbMapperImpl()
+    fun provideRemoteKeysDao(database: AppDatabase) = database.remoteKeysDao()
 
 }

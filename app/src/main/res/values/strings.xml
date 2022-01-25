@@ -18,4 +18,5 @@
     <string name="floating_action_button">Floating action button</string>
     <string name="save">Save</string>
     <string name="update">update</string>
+    <string name="retry">retry</string>
 </resources>

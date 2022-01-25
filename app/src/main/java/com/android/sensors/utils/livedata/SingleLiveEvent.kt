@@ -1,4 +1,4 @@
-package com.android.sensors.ui.livedata
+package com.android.sensors.utils.livedata
 
 import android.util.Log
 import androidx.annotation.MainThread

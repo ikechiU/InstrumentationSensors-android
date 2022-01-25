@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class GetSensor(
     @Json(name = "sensorId")
-    val sensorId: String = "",
+    val sensorId: String? = "",
     @Json(name = "title")
     val title: String = "",
     @Json(name = "description")

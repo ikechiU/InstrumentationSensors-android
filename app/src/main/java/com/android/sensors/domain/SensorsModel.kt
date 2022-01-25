@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.android.sensors.utils.Const.NEW_ID
 
 data class SensorsModel(
-    val id: Long = NEW_ID,
+    val id: String? = NEW_ID,
     val title: String? = "",
     val description: String? = "",
     val source: String? = "",
@@ -13,17 +13,16 @@ data class SensorsModel(
     val imageUrl: String? = ""
 ): Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readLong(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
+        parcel.writeString(id)
         parcel.writeString(title)
         parcel.writeString(description)
         parcel.writeString(source)

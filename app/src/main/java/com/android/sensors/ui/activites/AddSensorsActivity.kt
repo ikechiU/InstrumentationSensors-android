@@ -94,7 +94,7 @@ class AddSensorsActivity : AppCompatActivity() {
                 ))
                 viewModel.updateSensorRemote.observe(this, {
                     if (it is Resource.Success) {
-                        Toast.makeText(this, it.data.title + "updated", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, it.data.title + " updated", Toast.LENGTH_SHORT).show()
                         setResult(Activity.RESULT_OK)
                         finish()
                     } else if (it is Resource.Error) {
@@ -121,7 +121,7 @@ class AddSensorsActivity : AppCompatActivity() {
                 ))
                 viewModel.addSensorRemote.observe(this, {
                     if (it is Resource.Success) {
-                        Toast.makeText(this, it.data.title + "added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, it.data.title + " added", Toast.LENGTH_SHORT).show()
                         setResult(Activity.RESULT_OK)
                         finish()
                     } else if (it is Resource.Error) {
@@ -173,7 +173,7 @@ class AddSensorsActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    viewModel.setDeleteSensor(it.data.sensorId)
+                    it.data.sensorId?.let { id -> viewModel.setDeleteSensor(id) }
 
                     viewModel.deleteSensorRemote.observe(this, {operationStatus ->
                         if (operationStatus is Resource.Success) {
@@ -209,7 +209,7 @@ class AddSensorsActivity : AppCompatActivity() {
             builder.setPositiveButton(
                 "Yes"
             ) { _, _ ->
-                viewModel.deleteSensorLocal(sensor.id)
+                sensor.id?.let { viewModel.deleteSensorLocal(it) }
                 Toast.makeText(this, "${sensor.title} deleted successfully!", Toast.LENGTH_SHORT).show()
                 setResult(RESULT_OK)
                 finish()
