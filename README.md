@@ -5,10 +5,11 @@
 This is an MVVM android app that fetches data (Instrumentation Sensors) from a REST API [Sensors REST](https://instrumentation-sensors.herokuapp.com/) and caches it locally using Room persistence library.
 
 ## Features
-* Room persistence library
+* Room persistence library for caching
 * Clean Architecture with MVVM 
 * Dagger Hilt
 * Retrofit2
+* Pagination with Paging 3.0
 
 
 ## Prerequisite
