@@ -8,12 +8,15 @@
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/drawable/custom_image_container.xml" value="0.1962962962962963" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/drawable/ic_add.xml" value="0.246875" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/drawable/ic_delete.xml" value="0.246875" />
+        <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/drawable/ic_retry.xml" value="0.246875" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/drawable/ic_upload.xml" value="0.246875" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/layout/activity_add_sensors.xml" value="0.25343999226562525" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/layout/activity_sensors.xml" value="0.25343999226562525" />
+        <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/layout/fragment_add_update_sensors.xml" value="0.23072916666666668" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/layout/sensor_item.xml" value="0.25343999226562525" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/layout/sensors_loading_state.xml" value="0.23072916666666668" />
         <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/menu/delete_menu.xml" value="0.23072916666666668" />
+        <entry key="..\:/Users/ikech/AndroidStudioProjects/Sensors/app/src/main/res/menu/sensor_add_update_menu.xml" value="0.23072916666666668" />
       </map>
     </option>
   </component>

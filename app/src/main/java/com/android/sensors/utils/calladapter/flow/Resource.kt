@@ -12,4 +12,5 @@ sealed class Resource<T> {
     data class Error<T>(
         val errorData: String
     ) : Resource<T>()
+
 }

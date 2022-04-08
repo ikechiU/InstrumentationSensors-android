@@ -24,7 +24,7 @@ class SensorRepository @Inject constructor(
     fun fetchSensors(): Flow<PagingData<SensorsDbModel>> {
         return Pager(
             PagingConfig(
-                pageSize = 3, enablePlaceholders = false, prefetchDistance = 3
+                pageSize = 10, enablePlaceholders = false, prefetchDistance = 10
             ),
             remoteMediator = SensorsRemoteMediator(remote.apiInterface, appDatabase),
             pagingSourceFactory = { appDatabase.sensorsDao().getAllSensorsExtra() }

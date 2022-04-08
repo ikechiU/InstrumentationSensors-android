@@ -3,16 +3,34 @@ package com.android.sensors.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.android.sensors.data.local.model.SensorsDbModel
 import com.android.sensors.databinding.SensorItemBinding
 import com.android.sensors.domain.SensorsModel
-import com.android.sensors.utils.loadImage
+import com.bumptech.glide.RequestManager
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
-class SensorsAdapter(private val context: Context, private val onSensorClickListener: (SensorsModel) -> Unit):
+class SensorsAdapter(context: Context, private val onSensorClickListener: (SensorsModel) -> Unit) :
     PagingDataAdapter<SensorsDbModel, SensorsAdapter.SensorsViewHolder>(DiffCallback) {
+
+    private var glideRequestManager: RequestManager
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface GlideRequestManagerEntryPoint {
+        fun requestManager(): RequestManager
+    }
+
+    init {
+        val myEntryPoint =
+            EntryPointAccessors.fromApplication(context, GlideRequestManagerEntryPoint::class.java)
+        glideRequestManager = myEntryPoint.requestManager()
+    }
 
     object DiffCallback : DiffUtil.ItemCallback<SensorsDbModel>() {
         override fun areItemsTheSame(
@@ -28,7 +46,6 @@ class SensorsAdapter(private val context: Context, private val onSensorClickList
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SensorsViewHolder {
@@ -37,7 +54,7 @@ class SensorsAdapter(private val context: Context, private val onSensorClickList
     }
 
     override fun onBindViewHolder(holder: SensorsViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(context, it) }
+        getItem(position)?.let { holder.bind(glideRequestManager, it) }
         holder.binding.root.setOnClickListener {
             getItem(position)?.let { sensorDbModel ->
                 val data = SensorsModel(
@@ -53,13 +70,16 @@ class SensorsAdapter(private val context: Context, private val onSensorClickList
         }
     }
 
-    class SensorsViewHolder(val binding: SensorItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class SensorsViewHolder(val binding: SensorItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(context: Context, sensorsDbModel: SensorsDbModel) {
+        fun bind(glideRequestManager: RequestManager, sensorsDbModel: SensorsDbModel) {
             binding.title.text = sensorsDbModel.title
             binding.description.text = sensorsDbModel.description
-            loadImage(context, sensorsDbModel.imageUrl!!, binding.image)
+            glideRequestManager.load(sensorsDbModel.imageUrl!!).into(binding.image)
         }
     }
 
 }
+
+

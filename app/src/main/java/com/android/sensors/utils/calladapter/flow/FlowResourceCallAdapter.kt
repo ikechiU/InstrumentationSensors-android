@@ -1,13 +1,13 @@
 package com.android.sensors.utils.calladapter.flow
 
-import com.android.sensors.utils.calladapter.flow.Resource.Error
-import com.android.sensors.utils.calladapter.flow.Resource.Success
+import com.google.gson.JsonParser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.awaitResponse
+import timber.log.Timber
 import java.lang.reflect.Type
 
 class FlowResourceCallAdapter<R>(
@@ -19,28 +19,43 @@ class FlowResourceCallAdapter<R>(
 
     override fun adapt(call: Call<R>) = flow<Resource<R>> {
 
-        // Firing loading resource
-        emit(Resource.Loading<R>())
-
         val resp = call.awaitResponse()
+
+        // Firing loading resource
+        emit(Resource.Loading())
 
         if (resp.isSuccessful) {
             resp.body()?.let { data ->
                 // Success
-                emit(Success(null, data))
+                emit(Resource.Success(null, data))
             } ?: kotlin.run {
                 // Error
-                emit(Error("Response can't be null"))
+                emit(Resource.Error("Response can't be null"))
             }
         } else {
             // Error
-            val errorBody = resp.message()
-            emit(Error(errorBody))
+
+            val msg = resp.errorBody()?.string()
+
+            var errorBody: String
+
+            if (msg.isNullOrEmpty()) {
+                errorBody = resp.message()
+            } else {
+                try {
+                    errorBody = JsonParser().parse(msg).asJsonObject["message"].asString
+                } catch (e: Exception) {
+                    errorBody = "Maximum upload size exceeded."
+                    Timber.d(e.localizedMessage)
+                }
+            }
+
+            emit(Resource.Error(errorBody))
         }
 
     }.catch { error: Throwable ->
         if (isSelfExceptionHandling) {
-            emit(Error(error.message ?: "Something went wrong"))
+            emit(Resource.Error(error.message ?: "Something went wrong"))
         } else {
             throw error
         }

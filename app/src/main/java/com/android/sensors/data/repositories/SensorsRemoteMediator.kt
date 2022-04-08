@@ -47,6 +47,8 @@ class SensorsRemoteMediator @Inject constructor (
                         appDatabase.sensorsDao().clearAllSensors()
                     }
 
+//                    val prevKey = (response.body()?.previousPage)?.toInt() ?: response.body()?.currentPage?.minus(1)
+//                    val nextKey = (response.body()?.nextPage)?.toInt() ?: response.body()?.currentPage?.plus(1)
                     val prevKey = if(page == DEFAULT_PAGE_INDEX) null else page - 1
                     val nextKey = if(isEndOfList) null else page + 1
                     val keys = listing.map {
@@ -85,6 +87,7 @@ class SensorsRemoteMediator @Inject constructor (
             LoadType.APPEND -> {
                 val remoteKeys = getLastRemoteKey(state)
                     ?: throw InvalidObjectException("Remote key should not be null for $loadType")
+                remoteKeys.nextKey?: return MediatorResult.Success(endOfPaginationReached = true)
                 remoteKeys.nextKey
             }
         }

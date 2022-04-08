@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sensornav"
+    app:startDestination="@id/sensorsFragment">
+
+    <fragment
+        android:id="@+id/sensorsFragment"
+        android:name="com.android.sensors.ui.screen.fragment.SensorsFragment"
+        android:label="fragment_sensors"
+        tools:layout="@layout/fragment_sensors" >
+
+        <action
+            android:id="@+id/action_sensorsFragment_to_sensorsDetailsFragment"
+            app:destination="@id/sensorsDetailsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left">
+
+            <argument
+                android:name="SensorsModel"
+                app:argType="com.android.sensors.domain.SensorsModel" />
+
+        </action>
+
+        <action
+            android:id="@+id/action_sensorsFragment_to_addUpdateSensorFragment"
+            app:destination="@id/addUpdateSensorFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/sensorsDetailsFragment"
+        android:name="com.android.sensors.ui.screen.fragment.SensorsDetailsFragment"
+        android:label="SensorsDetailsFragment"
+        tools:layout="@layout/fragment_sensors_details">
+
+        <action
+            android:id="@+id/action_sensorsDetailsFragment_to_addUpdateSensorFragment"
+            app:destination="@id/addUpdateSensorFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left">
+
+            <argument
+                android:name="SensorsModel"
+                app:argType="com.android.sensors.domain.SensorsModel" />
+
+        </action>
+
+        <argument
+            android:name="SensorsModel"
+            app:argType="com.android.sensors.domain.SensorsModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <action
+            android:id="@+id/action_sensorsDetailsFragment_to_sensorsFragment"
+            app:destination="@id/sensorsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addUpdateSensorFragment"
+        android:name="com.android.sensors.ui.screen.fragment.AddUpdateSensorFragment"
+        android:label="fragment_add_update_sensors"
+        tools:layout="@layout/fragment_add_update_sensors" >
+
+        <action
+            android:id="@+id/action_addUpdateSensorFragment_to_sensorsFragment"
+            app:destination="@id/sensorsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+
+        <action
+            android:id="@+id/action_addUpdateSensorFragment_to_sensorsDetailsFragment"
+            app:destination="@id/sensorsDetailsFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left">
+
+            <argument
+                android:name="SensorsModel"
+                app:argType="com.android.sensors.domain.SensorsModel" />
+
+        </action>
+
+    </fragment>
+
+</navigation>

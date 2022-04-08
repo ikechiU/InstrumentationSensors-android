@@ -19,4 +19,5 @@
     <string name="save">Save</string>
     <string name="update">update</string>
     <string name="retry">retry</string>
+    <string name="touch_to_change_image">Touch to change image</string>
 </resources>

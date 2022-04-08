@@ -8,5 +8,7 @@ object Const {
     const val IS_EDITING_MODE = "com.android.sensors.utils.Const.IS_EDITING_MODE"
     const val SWIPE_DELAY = 1000L
     const val DEFAULT_PAGE_INDEX = 1
+    const val PERMISSIONS_REQUEST_READ_STORAGE: Int = 301
+    const val ONE_MEGA_BYTE: Int = 1000000
 
 }

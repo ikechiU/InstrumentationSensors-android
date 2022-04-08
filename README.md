@@ -9,7 +9,12 @@ This is an MVVM android app that fetches data (Instrumentation Sensors) from a R
 * Clean Architecture with MVVM 
 * Dagger Hilt
 * Retrofit2
+* Flow
 * Pagination with Paging 3.0
+
+## Features Updated (08-04-2022)
+* Single Activity and Fragments used with navigation component.
+* HTTP POST & PUT request updated with MultipartFile.
 
 
 ## Prerequisite
