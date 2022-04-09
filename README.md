@@ -31,9 +31,9 @@ To build this project, you require:
 
 <h2 align="left">Screenshots</h2>
 <h4 align="center">
-<img src="https://res.cloudinary.com/iykeafrica/image/upload/v1642556244/instrumentation-sensors/2022_01_19_02.28.46_xwxqsv.jpg" width="30%" vspace="10" hspace="10">
-<img src="https://res.cloudinary.com/iykeafrica/image/upload/v1642556245/instrumentation-sensors/2022_01_19_02.29.14_jypjza.jpg" width="30%" vspace="10" hspace="10">
-<img src="https://res.cloudinary.com/iykeafrica/image/upload/v1642556245/instrumentation-sensors/2022_01_19_02.29.23_c4ot3m.jpg" width="30%" vspace="10" hspace="10">
+<img src="https://res.cloudinary.com/dpxkejiyy/image/upload/v1649522075/sensor/production/repo_images/2022_04_09_17.29.05_qazzqw.jpg" width="30%" vspace="10" hspace="10">
+<img src="https://res.cloudinary.com/dpxkejiyy/image/upload/v1649522076/sensor/production/repo_images/2022_04_09_17.29.10_lvddby.jpg" width="30%" vspace="10" hspace="10">
+<img src="https://res.cloudinary.com/dpxkejiyy/image/upload/v1649522077/sensor/production/repo_images/2022_04_09_17.29.27_gpz9ky.jpg" width="30%" vspace="10" hspace="10">
 
 ## Author
 Ikechi Ucheagwu 
