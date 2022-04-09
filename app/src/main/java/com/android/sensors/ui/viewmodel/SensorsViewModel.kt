@@ -40,14 +40,6 @@ class SensorsViewModel @Inject constructor(
         sensorRepo.remote.getSensors().asLiveData()
     }
 
-    private val _getSensorRemote = MutableLiveData<String>()
-    fun setSensorId(sensorId: String) {
-        _getSensorRemote.value = sensorId
-    }
-    val getSensorRemote: LiveData<Resource<GetSensor>> = _getSensorRemote.switchMap {
-        sensorRepo.remote.getSensor(it).asLiveData()
-    }
-
     internal class CreateSensorFormData (
         val title: RequestBody,
         val description: RequestBody,

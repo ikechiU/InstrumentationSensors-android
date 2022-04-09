@@ -96,38 +96,18 @@ class SensorsDetailsFragment : BaseFragment() {
 
     private fun deleteFromNetwork() {
         showProgressBar(binding.progressBar)
-        viewModel.setSensorId(sensor.title!!)
+        viewModel.setDeleteSensor(sensor.id!!)
 
-        viewModel.getSensorRemote.observe(viewLifecycleOwner, {
-            when(it) {
-
-                is Resource.Loading -> {
-                    Timber.d("Loading")
-                }
-
-                is Resource.Success -> {
-                    it.data.sensorId?.let { id -> viewModel.setDeleteSensor(id) }
-
-                    viewModel.deleteSensorRemote.observe(viewLifecycleOwner, {operationStatus ->
-                        if (operationStatus is Resource.Success) {
-                            Toast.makeText(getActivity, "Delete action: " + operationStatus.data.operationResult, Toast.LENGTH_SHORT).show()
-                            viewModel.stopLoading()
-                            findNavController().navigate(R.id.action_sensorsDetailsFragment_to_sensorsFragment)
-                        } else if (operationStatus is Resource.Error) {
-                            Toast.makeText(getActivity, operationStatus.errorData, Toast.LENGTH_SHORT).show();
-                        }
-
-                    })
-                }
-
-                is Resource.Error -> {
-                    Toast.makeText(getActivity, it.errorData, Toast.LENGTH_SHORT).show()
-                    viewModel.stopLoading()
-                }
+        viewModel.deleteSensorRemote.observe(viewLifecycleOwner, {operationStatus ->
+            if (operationStatus is Resource.Success) {
+                Toast.makeText(getActivity, "Delete action: " + operationStatus.data.operationResult, Toast.LENGTH_SHORT).show()
+                viewModel.stopLoading()
+                findNavController().navigate(R.id.action_sensorsDetailsFragment_to_sensorsFragment)
+            } else if (operationStatus is Resource.Error) {
+                Toast.makeText(getActivity, operationStatus.errorData, Toast.LENGTH_SHORT).show();
             }
         })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
