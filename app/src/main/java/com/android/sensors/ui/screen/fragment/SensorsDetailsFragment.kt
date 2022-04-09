@@ -34,9 +34,6 @@ class SensorsDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         val bundle = arguments
         if (bundle == null) {
             Timber.e("$TAG, SensorDetails did not receive any SensorModel data")

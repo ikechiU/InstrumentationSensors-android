@@ -7,6 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.sensors.databinding.ActivitySensorsBinding
 import com.android.sensors.ui.viewmodel.SensorsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import android.R
+import android.app.PendingIntent.getActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import com.android.sensors.ui.screen.fragment.SensorsFragment
+
 
 @AndroidEntryPoint
 class SensorsActivity : AppCompatActivity() {
@@ -23,4 +29,5 @@ class SensorsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[SensorsViewModel::class.java]
 
     }
+
 }

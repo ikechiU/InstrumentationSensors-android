@@ -64,7 +64,13 @@
 
         <action
             android:id="@+id/action_sensorsDetailsFragment_to_sensorsFragment"
-            app:destination="@id/sensorsFragment" />
+            app:destination="@id/sensorsFragment"
+            app:popUpTo="@+id/sensornav"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
 
     </fragment>
 
@@ -77,6 +83,8 @@
         <action
             android:id="@+id/action_addUpdateSensorFragment_to_sensorsFragment"
             app:destination="@id/sensorsFragment"
+            app:popUpTo="@+id/sensornav"
+            app:popUpToInclusive="true"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.sensors.R
 import com.android.sensors.databinding.FragmentSensorsBinding
 import com.android.sensors.ui.adapter.SensorsAdapter
 import com.android.sensors.ui.adapter.SensorsLoadingAdapter
@@ -22,6 +21,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.R
+import androidx.fragment.app.Fragment
+
 
 @AndroidEntryPoint
 class SensorsFragment : BaseFragment() {
@@ -42,7 +44,6 @@ class SensorsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        (activity as AppCompatActivity).supportActionBar?.title = "Sensors"
         setUpRecyclerView()
         fetchSensors()
 
@@ -58,7 +59,7 @@ class SensorsFragment : BaseFragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_sensorsFragment_to_addUpdateSensorFragment)
+            findNavController().navigate(com.android.sensors.R.id.action_sensorsFragment_to_addUpdateSensorFragment)
         }
     }
 
