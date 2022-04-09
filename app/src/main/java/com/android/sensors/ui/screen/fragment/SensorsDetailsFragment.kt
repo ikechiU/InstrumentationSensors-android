@@ -48,6 +48,7 @@ class SensorsDetailsFragment : BaseFragment() {
 
         Timber.d("$TAG, $sensor")
 
+        binding.detailsTitle.text = sensor.title
         binding.detailsDescription.text = sensor.description
         binding.detailsSource.text = sensor.source
         binding.detailsMoreInfo.text = sensor.moreInfo
