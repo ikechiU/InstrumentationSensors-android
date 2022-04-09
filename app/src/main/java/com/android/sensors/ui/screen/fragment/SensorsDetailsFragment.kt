@@ -2,6 +2,7 @@ package com.android.sensors.ui.screen.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -47,8 +48,12 @@ class SensorsDetailsFragment : BaseFragment() {
 
         binding.detailsTitle.text = sensor.title
         binding.detailsDescription.text = sensor.description
+
         binding.detailsSource.text = sensor.source
+        binding.detailsSource.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
         binding.detailsMoreInfo.text = sensor.moreInfo
+        binding.detailsMoreInfo.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         binding.detailsSource.setOnClickListener {
             visitUrl(getActivity, binding.detailsSource.text.toString())
