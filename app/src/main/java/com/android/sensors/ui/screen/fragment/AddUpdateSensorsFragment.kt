@@ -1,13 +1,20 @@
 package com.android.sensors.ui.screen.fragment
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -23,6 +30,7 @@ import com.android.sensors.databinding.FragmentAddUpdateSensorsBinding
 import com.android.sensors.domain.SensorsModel
 import com.android.sensors.utils.Const
 import com.android.sensors.utils.calladapter.flow.Resource
+import com.android.sensors.utils.safeNavigate
 import com.bumptech.glide.Glide
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
@@ -39,8 +47,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.util.concurrent.ExecutionException
+
 
 @AndroidEntryPoint
 class AddUpdateSensorFragment : BaseFragment() {
@@ -112,9 +122,9 @@ class AddUpdateSensorFragment : BaseFragment() {
             if(sensor != null) {
                 val directions =
                     AddUpdateSensorFragmentDirections.actionAddUpdateSensorFragmentToSensorsDetailsFragment(sensor!!)
-                findNavController().navigate(directions)
+                findNavController().safeNavigate(directions)
             } else {
-                findNavController().navigate(R.id.action_addUpdateSensorFragment_to_sensorsFragment)
+                navigateToSensorsFragment()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -132,22 +142,9 @@ class AddUpdateSensorFragment : BaseFragment() {
                 !binding.source.text.isNullOrEmpty() && binding.sensorImage.drawable != null) {
 
                 if(uri != null) {
-                    val file = toMultipartBody(uri!!, null)
-                    val imageBytes = File(uri!!.path!!).length()
-                    Timber.d("File size is  $imageBytes")
-
-                    if(imageBytes < Const.ONE_MEGA_BYTE){
-                        if(file != null) {
-                            postSensor(file)
-                        } else {
-                            Timber.d("MultipartBody.Part file is null")
-                            Toast.makeText(getActivity, "MultipartBody.Part file is null", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        val imageMb = df.format((imageBytes / Const.ONE_MEGA_BYTE))
-                        Toast.makeText(getActivity, "Image size (${imageMb}Mb) should not be greater than 1Mb.", Toast.LENGTH_LONG).show()
-                    }
-                } else {
+                    withUri(uri!!, null)
+                }
+                else {
                     Timber.d("Uri is null")
                     Toast.makeText(getActivity, "Uri is null", Toast.LENGTH_SHORT).show()
                 }
@@ -156,6 +153,38 @@ class AddUpdateSensorFragment : BaseFragment() {
                 Toast.makeText(getActivity, "Please fill in title, description, source and image.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun withUri(uri: Uri, sensor: SensorsModel?) {
+        val file = toMultipartBody(createTemporaryFile(uri))
+        val imageBytes = File(uri.path!!).length()
+        Timber.d("File size is  $imageBytes")
+
+        if(imageBytes < Const.ONE_MEGA_BYTE){
+            if(file != null) {
+                if(sensor == null)
+                    postSensor(file)
+                else
+                    updatingSensor(sensor, file)
+            } else {
+                Timber.d("MultipartBody.Part file is null")
+                Toast.makeText(getActivity, "MultipartBody.Part file is null", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            val imageMb = df.format((imageBytes / Const.ONE_MEGA_BYTE))
+            Toast.makeText(getActivity, "Image size (${imageMb}Mb) should not be greater than 1Mb.", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun createTemporaryFile(uri: Uri): File? {
+        val inputStream  = context?.contentResolver?.openInputStream(uri)
+        val storageDir = getActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val tempFile = File.createTempFile(System.currentTimeMillis().toString(), ".jpg", storageDir)
+        val outputStream = FileOutputStream(tempFile)
+        inputStream?.copyTo(outputStream)
+        inputStream?.close()
+        outputStream.close()
+        return tempFile
     }
 
     private fun postSensor(file: MultipartBody.Part) {
@@ -180,7 +209,7 @@ class AddUpdateSensorFragment : BaseFragment() {
                         viewModel.stopLoading()
                         Handler(Looper.getMainLooper()).post(Runnable {
                             Toast.makeText(getActivity, it.data.title + " added", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_addUpdateSensorFragment_to_sensorsFragment)
+                            navigateToSensorsFragment()
                         })
                     }
                     is Resource.Error -> {
@@ -211,28 +240,13 @@ class AddUpdateSensorFragment : BaseFragment() {
                 !binding.source.text.isNullOrEmpty() && binding.sensorImage.drawable != null) {
 
                 if(uri != null) {
-                    val file = toMultipartBody(uri!!, null)
-
-                    if(file != null) {
-                        val imageBytes = File(uri!!.path!!).length()
-                        Timber.d("File size is  $imageBytes")
-
-                        if(imageBytes < Const.ONE_MEGA_BYTE){
-                            updatingSensor(sensor, file)
-                        } else {
-                            val imageMb =  df.format((imageBytes / Const.ONE_MEGA_BYTE))
-                            Toast.makeText(getActivity, "Image size (${imageMb}Mb) should not be greater than 1Mb.", Toast.LENGTH_LONG).show()
-                        }
-                    } else {
-                        Timber.d("MultipartBody.Part file is null")
-                        Toast.makeText(getActivity, "MultipartBody.Part file is null", Toast.LENGTH_SHORT).show()
-                    }
+                    withUri(uri!!, sensor)
                 } else { //Get the previous image file from network
                     CoroutineScope(IO).launch {
                         try{
                             val cachedFile: File = Glide.with(getActivity).asFile().load(sensor.imageUrl).submit().get()
                             withContext(Dispatchers.Main) {
-                                val file = toMultipartBody(null, cachedFile)
+                                val file = toMultipartBody(cachedFile)
 
                                 if(file != null) {
                                     val imageBytes = cachedFile.length()
@@ -288,7 +302,7 @@ class AddUpdateSensorFragment : BaseFragment() {
                         viewModel.stopLoading()
                         Handler(Looper.getMainLooper()).post(Runnable {
                             Toast.makeText(getActivity, it.data.title + " updated", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_addUpdateSensorFragment_to_sensorsFragment)
+                            navigateToSensorsFragment()
                         })
                     }
                     is Resource.Error -> {
@@ -302,53 +316,36 @@ class AddUpdateSensorFragment : BaseFragment() {
         }
     }
 
+    private fun navigateToSensorsFragment() {
+        lifecycleScope.launchWhenResumed {
+            val directions =
+                AddUpdateSensorFragmentDirections.actionAddUpdateSensorFragmentToSensorsFragment()
+            findNavController().safeNavigate(directions)
+        }
+    }
+
     private fun toRequestBody(string: String): RequestBody {
         return string.toRequestBody("multipart/form-data".toMediaTypeOrNull())
     }
 
-    private fun toMultipartBody(uri: Uri?, file: File?): MultipartBody.Part? {
-        Timber.d("$TAG, Uri is: $uri")
+    private fun toMultipartBody(file: File?): MultipartBody.Part? {
+        Timber.d("$TAG, File is: $file")
 
-        if (uri != null) { //use uri
+        if(file != null) {
+            Timber.d("File size is  ${file.length()}")
 
-            uri.path?.let { filePath ->
-                val imageFile = File(filePath)
-                Timber.d("File size is  ${imageFile.length()}")
-
-                if (imageFile.exists()) {
-                    Timber.d("$TAG, file is: $imageFile")
-                    return getMultipartBodyPart(imageFile)
-                }
-            }
-
-        } else { //use file
-            if(file != null) {
-                Timber.d("File size is  ${file.length()}")
-
-                if (file.exists()) {
-                    Timber.d("$TAG, file is: $file")
-                    return getMultipartBodyPart(file)
-                }
+            if (file.exists()) {
+                Timber.d("$TAG, file is: $file")
+                return MultipartBody.Part.createFormData(
+                    "file",
+                    file.name,
+                    file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                )
             }
         }
 
         return null
     }
-
-    private fun getMultipartBodyPart(file: File): MultipartBody.Part {
-        val multipartBody: MultipartBody.Part?
-
-        val requestBody =
-            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-        multipartBody = MultipartBody.Part.createFormData(
-            "file",
-            file.name,
-            requestBody
-        )
-
-        return multipartBody
-    }
-
 
     private fun isStoragePermissionGranted(): Boolean {
         if (

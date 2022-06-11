@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.R
 import androidx.fragment.app.Fragment
+import com.android.sensors.utils.safeNavigate
 
 
 @AndroidEntryPoint
@@ -70,7 +71,7 @@ class SensorsFragment : BaseFragment() {
                 SensorsFragmentDirections.actionSensorsFragmentToSensorsDetailsFragment(
                     sensorModel
                 )
-            findNavController().navigate(directions)
+            findNavController().safeNavigate(directions)
         }
 
         binding.recyclerview.layoutManager = LinearLayoutManager(getActivity)
@@ -100,6 +101,11 @@ class SensorsFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchSensors()
     }
 
     private fun loadSensors() {

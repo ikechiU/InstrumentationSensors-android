@@ -9,11 +9,13 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.sensors.R
 import com.android.sensors.databinding.FragmentSensorsDetailsBinding
 import com.android.sensors.domain.SensorsModel
 import com.android.sensors.utils.calladapter.flow.Resource
+import com.android.sensors.utils.safeNavigate
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -98,15 +100,15 @@ class SensorsDetailsFragment : BaseFragment() {
         showProgressBar(binding.progressBar)
         viewModel.setDeleteSensor(sensor.id!!)
 
-        viewModel.deleteSensorRemote.observe(viewLifecycleOwner, {operationStatus ->
+        viewModel.deleteSensorRemote.observe(viewLifecycleOwner) { operationStatus ->
             if (operationStatus is Resource.Success) {
                 Toast.makeText(getActivity, "Delete action: " + operationStatus.data.operationResult, Toast.LENGTH_SHORT).show()
                 viewModel.stopLoading()
-                findNavController().navigate(R.id.action_sensorsDetailsFragment_to_sensorsFragment)
+                navigateToSensorsFragment()
             } else if (operationStatus is Resource.Error) {
                 Toast.makeText(getActivity, operationStatus.errorData, Toast.LENGTH_SHORT).show();
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -126,7 +128,7 @@ class SensorsDetailsFragment : BaseFragment() {
             ) { _, _ ->
                 sensor.id?.let { viewModel.deleteSensorLocal(it) }
                 Toast.makeText(getActivity, "${sensor.title} deleted successfully!", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_sensorsDetailsFragment_to_sensorsFragment)
+                navigateToSensorsFragment()
             }
             builder.setNegativeButton(
                 "No"
@@ -139,16 +141,24 @@ class SensorsDetailsFragment : BaseFragment() {
         }
 
         if (id == android.R.id.home) {
-            findNavController().navigate(R.id.action_sensorsDetailsFragment_to_sensorsFragment)
+            navigateToSensorsFragment()
         }
 
         if (id == R.id.update) {
             val directions =
                 SensorsDetailsFragmentDirections.actionSensorsDetailsFragmentToAddUpdateSensorFragment(sensor)
-            findNavController().navigate(directions)
+            findNavController().safeNavigate(directions)
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun navigateToSensorsFragment() {
+        lifecycleScope.launchWhenResumed {
+            val directions =
+                SensorsDetailsFragmentDirections.actionSensorsDetailsFragmentToSensorsFragment()
+            findNavController().safeNavigate(directions)
+        }
     }
 
 
